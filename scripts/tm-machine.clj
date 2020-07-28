@@ -165,6 +165,6 @@
       ssm-location (str "/lxk-dev/tendermint_node/" tm-instance-id)
       instance-id (:body (babashka.curl/get "http://169.254.169.254/latest/meta-data/instance-id"))]
   (case command
-    "get-volume" (get-volume-id instance-id (nth *command-line-args* 2))
+    "get-volume" (println (get-volume-id tm-instance-id (nth *command-line-args* 2)))
     "start" (start tm-instance-id (nth *command-line-args* 2) instance-id)
     "stop" (stop tm-instance-id (nth *command-line-args* 2) instance-id)))

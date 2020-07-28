@@ -64,7 +64,8 @@ data "aws_iam_policy_document" "build_machine" {
     ]
     resources = [
       "arn:aws:ec2:*:*:instance/${aws_instance.build_machine.id}",
-      "arn:aws:ec2:*:*:instance/${data.aws_instance.linuxkit_instance.instance_id}"
+      "arn:aws:ec2:*:*:instance/${data.aws_instance.linuxkit_instance.instance_id}",
+      "arn:aws:ec2:*:*:volume/*"
     ]
   }
 
@@ -86,18 +87,6 @@ data "aws_iam_policy_document" "build_machine" {
       "ec2:DescribeVolumes"
     ]
     resources = ["*"]
-  }
-
-  statement {
-    effect = "Allow"
-    actions = [
-      "ssm:GetParametersByPath",
-      "ssm:GetParameters",
-      "ssm:GetParameter"
-    ]
-    resources = [
-      "arn:aws:ssm:${data.aws_region.region.name}:${data.aws_caller_identity.identity.account_id}:parameter/lxk-dev/*"
-    ]
   }
 
   depends_on = [data.aws_instance.linuxkit_instance]
