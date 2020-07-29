@@ -143,28 +143,27 @@
       (throw (ex-info (str "Unable to start instance " instance-id ". Status: " status) {:type :fault})))))
 
 (defn stop
-  [tm-instance-id volume-id instance-id]
-  (println "Stopping TM instance")
-  (stop-instance-and-wait tm-instance-id 120)
-  (println "Detaching Root volume from TM instance")
-  (detach-and-wait tm-instance-id volume-id 20)
+  [lxk-instance-id volume-id instance-id]
+  (println "Stopping LXK instance")
+  (stop-instance-and-wait lxk-instance-id 120)
+  (println "Detaching Root volume from LXK instance")
+  (detach-and-wait lxk-instance-id volume-id 20)
   (println "Attaching Root volume to this instance")
   (attach-and-wait instance-id volume-id "/dev/sdf" 20))
 
 (defn start
-  [tm-instance-id volume-id instance-id]
+  [lxk-instance-id volume-id instance-id]
   (println "Detaching volume from this instance")
   (detach-and-wait instance-id volume-id 20)
-  (println "Attaching volume to TM instance")
-  (attach-and-wait tm-instance-id volume-id "/dev/sda1" 20)
-  (println "Starting TM instance")
-  (start-instance-and-wait tm-instance-id 120))
+  (println "Attaching volume to LXK instance")
+  (attach-and-wait lxk-instance-id volume-id "/dev/sda1" 20)
+  (println "Starting LXK instance")
+  (start-instance-and-wait lxk-instance-id 120))
 
 (let [command (first *command-line-args*)
-      tm-instance-id (second *command-line-args*)
-      ssm-location (str "/lxk-dev/tendermint_node/" tm-instance-id)
+      lxk-instance-id (second *command-line-args*)
       instance-id (:body (babashka.curl/get "http://169.254.169.254/latest/meta-data/instance-id"))]
   (case command
-    "get-volume" (println (get-volume-id tm-instance-id (nth *command-line-args* 2)))
-    "start" (start tm-instance-id (nth *command-line-args* 2) instance-id)
-    "stop" (stop tm-instance-id (nth *command-line-args* 2) instance-id)))
+    "get-volume" (println (get-volume-id lxk-instance-id (nth *command-line-args* 2)))
+    "start" (start lxk-instance-id (nth *command-line-args* 2) instance-id)
+    "stop" (stop lxk-instance-id (nth *command-line-args* 2) instance-id)))
