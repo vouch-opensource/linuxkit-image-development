@@ -129,7 +129,7 @@
       :ok
       
       (> 0 seconds)
-      (throw (ex-info (str "Unable to start instance " instance-id " within the given timeout of " timeout " seconds.")))
+      (throw (ex-info (str "Unable to start instance " instance-id " within the given timeout of " timeout " seconds.") {:type :fault}))
       
       (#{"pending" "stopping"} status)
       (do (Thread/sleep 1000)

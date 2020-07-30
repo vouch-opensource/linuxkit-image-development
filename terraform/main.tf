@@ -89,7 +89,7 @@ data "aws_iam_policy_document" "build_machine" {
     resources = ["*"]
   }
 
-  depends_on = [data.aws_instance.linuxkit_instance]
+  depends_on = [data.aws_instance.linuxkit_instance.instance_id]
 }
 
 resource "aws_iam_role" "build_machine" {
