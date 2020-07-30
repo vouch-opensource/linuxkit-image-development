@@ -103,7 +103,7 @@
       :ok
 
       (> 0 seconds)
-      (throw (ex-info (str "Unable to stop instance " instance-id " within the given timeout of " timeout " seconds.")))
+      (throw (ex-info (str "Unable to stop instance " instance-id " within the given timeout of " timeout " seconds.") {}))
       
       (#{"pending" "stopping"} status)
       (do (Thread/sleep 1000)
@@ -114,7 +114,7 @@
           (recur (instance-status instance-id) seconds))
 
       :else
-      (throw (ex-info (str "Unable to stop instance " instance-id ". Status: " status))))))
+      (throw (ex-info (str "Unable to stop instance " instance-id ". Status: " status) {})))))
 
 (defn start-instance
   [instance-id]
