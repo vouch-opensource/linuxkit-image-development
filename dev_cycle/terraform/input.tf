@@ -5,4 +5,4 @@ variable "instance_type" {}
 variable "key_pair_name" {}
 variable "machine_name" {}
 variable "vpc_id" {}
-variable "aws_iam_role_name" {}
+variable "aws_iam_role_id" {}
