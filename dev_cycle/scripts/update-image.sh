@@ -7,7 +7,7 @@ instance=$2
 disk=${3:-/dev/nvme1n1}
 volume=$(lxk-machine.clj get-volume $instance "/dev/sda1")
 
-tm-machine.clj stop $instance $volume
+lxk-machine.clj stop $instance $volume
 
 while [[ ! -b $disk && $retries -le 5 ]]; do
     sleep 1;
@@ -21,4 +21,4 @@ else
     exit 1
 fi
 
-tm-machine.clj start $instance $volume
+lxk-machine.clj start $instance $volume
