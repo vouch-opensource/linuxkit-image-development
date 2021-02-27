@@ -25,7 +25,7 @@ provider "cloudinit" {
 data "cloudinit_config" "install" {
   part {
     content_type = "text/x-shellscript"
-    content = file("${path.module}/install.sh")
+    content = templatefile("${path.module}/install.sh",linuxkit_download_url,babashka_download_url)
     filename = "install.sh"
   }
 }

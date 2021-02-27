@@ -22,13 +22,11 @@ apt-get -y install docker-ce docker-ce-cli containerd.io qemu
 usermod -a -G docker ubuntu
 
 # install linuxkit
-export GOPATH=~/go
-mkdir -p $GOPATH
-go get -u github.com/linuxkit/linuxkit/src/cmd/linuxkit
-cp $GOPATH/bin/linuxkit /usr/local/bin/
+wget ${linuxkit_download_url} -O /usr/local/bin/linuxkit
+chmod +x linuxkit
 
 # install babashka
-curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install -o install-babashka
+curl -s ${babashka_download_url} -o install-babashka
 chmod +x install-babashka
 ./install-babashka
 
