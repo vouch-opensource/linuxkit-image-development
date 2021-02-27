@@ -23,7 +23,7 @@ usermod -a -G docker ubuntu
 
 # install linuxkit
 wget ${linuxkit_download_url} -O /usr/local/bin/linuxkit
-chmod +x linuxkit
+chmod +x /usr/local/bin/linuxkit
 
 # install babashka
 curl -s ${babashka_download_url} -o install-babashka
