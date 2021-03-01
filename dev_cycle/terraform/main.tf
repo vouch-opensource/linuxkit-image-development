@@ -72,6 +72,21 @@ data "aws_iam_policy_document" "build_machine" {
   statement {
     effect = "Allow"
     actions = [
+      "kms:CreateGrant",
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:ReEncrypt*",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey",
+    ]
+    resources = [
+      "arn:aws:kms:*:*:key/${var.ebs_kms_key_arn}"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
       "ec2:StartInstances",
       "ec2:StopInstances"
     ]
