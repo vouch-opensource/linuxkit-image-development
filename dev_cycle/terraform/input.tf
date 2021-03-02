@@ -7,3 +7,14 @@ variable "machine_name" {}
 variable "vpc_id" {}
 variable "aws_iam_role_id" {}
 variable "ebs_kms_key_arn" {}
+
+variable "install" {
+  type = object({
+    linuxkit_version = string
+    babashka_version = string
+  })
+  default = {
+    linuxkit_version = "master"
+    babashka_version = "master"
+  }
+}

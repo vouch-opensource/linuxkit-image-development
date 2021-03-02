@@ -3,7 +3,7 @@ data "aws_ami" "ubuntu" {
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
   }
 
   filter {
@@ -25,7 +25,7 @@ provider "cloudinit" {
 data "cloudinit_config" "install" {
   part {
     content_type = "text/x-shellscript"
-    content = file("${path.module}/install.sh")
+    content = templatefile("${path.module}/install.sh",var.install)
     filename = "install.sh"
   }
 }
