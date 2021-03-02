@@ -21,7 +21,7 @@ add-apt-repository \
    stable"
 apt-get update
 apt-get remove docker docker-engine docker.io containerd runc
-apt-get -y install docker-ce docker-ce-cli containerd.io qemu
+apt-get -y install docker-ce docker-ce-cli containerd.io qemu-kvm
 usermod -a -G docker ubuntu
 
 # install linuxkit
