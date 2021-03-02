@@ -5,7 +5,6 @@ set -ex
 # dependenciess
 
 apt-get update
-apt-get remove docker docker-engine docker.io containerd runc
 apt-get install -y golang-go git awscli unzip
 apt-get install -y \
     apt-transport-https \
@@ -21,6 +20,7 @@ add-apt-repository \
    $(lsb_release -cs) \
    stable"
 apt-get update
+apt-get remove docker docker-engine docker.io containerd runc
 apt-get -y install docker-ce docker-ce-cli containerd.io qemu
 usermod -a -G docker ubuntu
 
