@@ -10,11 +10,11 @@ variable "ebs_kms_key_arn" {}
 
 variable "install" {
   type = object({
-    linuxkit_download_url = string
-    babashka_download_url = string
+    linuxkit_version = string
+    babashka_version = string
   })
   default = {
-    linuxkit_download_url = "https://github.com/vouch-opensource/linuxkit/releases/download/1f93eab/linuxkit-amd64-linux"
-    babashka_download_url = "https://raw.githubusercontent.com/borkdude/babashka/master/install"
+    linuxkit_version = "master"
+    babashka_version = "master"
   }
 }
