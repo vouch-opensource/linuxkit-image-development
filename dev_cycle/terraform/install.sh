@@ -27,6 +27,7 @@ usermod -a -G docker ubuntu
 # install linuxkit
 
 export GOPATH=~/go
+export GOCACHE=/tmp/cache
 mkdir -p $GOPATH
 go get github.com/linuxkit/linuxkit/src/cmd/linuxkit
 pushd $GOPATH/src/github.com/linuxkit/linuxkit
