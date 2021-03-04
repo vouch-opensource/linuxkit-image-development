@@ -104,6 +104,29 @@ data "aws_iam_policy_document" "build_machine" {
     resources = ["*"]
   }
 
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:ListBucket",
+      "s3:ListBucketMultipartUploads",
+      "s3:ListMultipartUploadParts"
+    ]
+    resources = [
+      "arn:aws:s3:::${var.linuxkit_s3_bucket}"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:GetObject*",
+      "s3:PutObject*"
+    ]
+    resources = [
+      "arn:aws:s3:::${var.linuxkit_s3_bucket}/*"
+    ]
+  }
+
   depends_on = [data.aws_instance.linuxkit_instance]
 }
 
