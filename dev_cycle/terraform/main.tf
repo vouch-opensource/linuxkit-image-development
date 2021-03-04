@@ -80,7 +80,7 @@ data "aws_iam_policy_document" "build_machine" {
       "kms:DescribeKey",
     ]
     resources = [
-      "arn:aws:kms:*:*:key/${var.ebs_kms_key_arn}"
+      "${var.ebs_kms_key_arn}"
     ]
   }
 
