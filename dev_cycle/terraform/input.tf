@@ -7,7 +7,7 @@ variable "machine_name" {}
 variable "vpc_id" {}
 variable "aws_iam_role_id" {}
 variable "ebs_kms_key_arn" {}
-variable "linuxkit_s3_bucket" {}
+variable "linuxkit_bucket_name" {}
 
 variable "install" {
   type = object({

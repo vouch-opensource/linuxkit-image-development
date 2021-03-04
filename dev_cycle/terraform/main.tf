@@ -112,7 +112,7 @@ data "aws_iam_policy_document" "build_machine" {
       "s3:ListMultipartUploadParts"
     ]
     resources = [
-      "arn:aws:s3:::${var.linuxkit_s3_bucket}"
+      "arn:aws:s3:::${var.linuxkit_bucket_name}"
     ]
   }
 
@@ -123,7 +123,7 @@ data "aws_iam_policy_document" "build_machine" {
       "s3:PutObject*"
     ]
     resources = [
-      "arn:aws:s3:::${var.linuxkit_s3_bucket}/*"
+      "arn:aws:s3:::${var.linuxkit_bucket_name}/*"
     ]
   }
 
