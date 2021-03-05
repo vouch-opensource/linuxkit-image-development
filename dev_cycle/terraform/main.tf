@@ -127,6 +127,18 @@ data "aws_iam_policy_document" "build_machine" {
     ]
   }
 
+  statement {
+    effect = "Allow"
+    actions = [
+      "ec2:ImportSnapshot",
+      "ec2:DescribeImportSnapshotTasks",
+      "ec2:RegisterImage"
+    ]
+    resources = [
+      "*"
+    ]
+  }
+
   depends_on = [data.aws_instance.linuxkit_instance]
 }
 
