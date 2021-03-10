@@ -2,6 +2,21 @@
 
 set -ex
 
+# ephemeral disk setup
+
+apt install nvme-cli
+
+ephemeral_disk=$(nvme list | grep "Instance Storage" | awk '{ printf $1 }')
+
+if [ -n $ephemeral_disk ]; then
+  echo "# Setting up disk $ephemeral_disk";
+	/sbin/mkfs.ext4 -q $ephemeral_disk
+	partprobe -s
+	sed -i.bak '/\/opt/d' /etc/fstab
+	echo "$ephemeral_disk /opt/ ext4 defaults 0 0" >> /etc/fstab
+	mount -a
+fi
+
 # dependenciess
 
 apt-get update
