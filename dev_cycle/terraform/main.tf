@@ -1,3 +1,10 @@
+locals {
+  build_machine = {
+    instance_id = var.instance_ondemand ? aws_instance.build_machine[0].id : aws_spot_instance_request.build_machine[0].id
+    tag_name  = var.instance_ondemand ? aws_instance.build_machine[0].tags.Name : aws_spot_instance_request.build_machine[0].tags.Name
+  }
+}
+
 data "aws_ami" "ubuntu" {
   most_recent = true
 
@@ -31,6 +38,33 @@ data "cloudinit_config" "install" {
 }
 
 resource "aws_instance" "build_machine" {
+
+  count = var.instance_ondemand ? 1 : 0
+
+  ami = data.aws_ami.ubuntu.id
+  instance_type = var.instance_type
+  iam_instance_profile = aws_iam_instance_profile.build_node.id
+  key_name = var.key_pair_name
+  subnet_id = data.aws_instance.linuxkit_instance.subnet_id
+  associate_public_ip_address = true
+
+  root_block_device {
+    volume_size = 20
+    volume_type = "gp2"
+  }
+
+  tags = {
+    Name = var.machine_name
+  }
+
+  vpc_security_group_ids = [aws_security_group.build_node_access.id]
+  user_data_base64 = data.cloudinit_config.install.rendered
+}
+
+resource "aws_spot_instance_request" "build_machine" {
+
+  count = var.instance_ondemand ? 0 : 1
+
   ami = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
   iam_instance_profile = aws_iam_instance_profile.build_node.id
@@ -63,7 +97,7 @@ data "aws_iam_policy_document" "build_machine" {
       "ec2:DetachVolume"
     ]
     resources = [
-      "arn:aws:ec2:*:*:instance/${aws_instance.build_machine.id}",
+      "arn:aws:ec2:*:*:instance/${local.build_machine.instance_id}",
       "arn:aws:ec2:*:*:instance/${data.aws_instance.linuxkit_instance.instance_id}",
       "arn:aws:ec2:*:*:volume/*"
     ]
@@ -148,7 +182,7 @@ resource "aws_iam_instance_profile" "build_node" {
 }
 
 resource "aws_iam_policy" "allow_build_volume_attachment" {
-  name = "${aws_instance.build_machine.tags.Name}-volume-attachment"
+  name = "${local.build_machine.tag_name}-volume-attachment"
   policy = data.aws_iam_policy_document.build_machine.json
   depends_on = [data.aws_instance.linuxkit_instance]
 }
