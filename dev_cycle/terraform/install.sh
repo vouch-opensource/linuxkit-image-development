@@ -5,16 +5,18 @@ set -ex
 # ephemeral disk setup
 
 apt install nvme-cli
-
+user=ubuntu
+ephemeral_dir="/home/$user/project"
 ephemeral_disk=$(nvme list | grep "Instance Storage" | awk '{ printf $1 }')
 
-if [ -n $ephemeral_disk ]; then
+if [ -n "$ephemeral_disk" ]; then
   echo "# Setting up disk $ephemeral_disk";
-	/sbin/mkfs.ext4 -q $ephemeral_disk
-	partprobe -s
-	sed -i.bak '/\/opt/d' /etc/fstab
-	echo "$ephemeral_disk /opt/ ext4 defaults 0 0" >> /etc/fstab
-	mount -a
+  mkdir -p $ephemeral_dir
+  /sbin/mkfs.ext4 -q $ephemeral_disk
+  partprobe -s
+  echo "$ephemeral_disk $ephemeral_dir/ ext4 defaults 0 0" >> /etc/fstab
+  mount -a
+  chown -R $user: $ephemeral_dir && chmod -R 755 $ephemeral_dir
 fi
 
 # dependenciess
