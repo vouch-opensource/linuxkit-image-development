@@ -19,3 +19,7 @@ variable "install" {
     babashka_version = "master"
   }
 }
+
+variable "instance_ondemand" {
+  default = true
+}
