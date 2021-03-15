@@ -45,7 +45,7 @@ resource "aws_instance" "build_machine" {
   instance_type = var.instance_type
   iam_instance_profile = aws_iam_instance_profile.build_node.id
   key_name = var.key_pair_name
-  subnet_id = data.aws_instance.linuxkit_instance.subnet_id
+  subnet_id = var.subnet_id
   associate_public_ip_address = true
 
   root_block_device {
@@ -69,7 +69,7 @@ resource "aws_spot_instance_request" "build_machine" {
   instance_type = var.instance_type
   iam_instance_profile = aws_iam_instance_profile.build_node.id
   key_name = var.key_pair_name
-  subnet_id = data.aws_instance.linuxkit_instance.subnet_id
+  subnet_id = var.subnet_id
   associate_public_ip_address = true
 
   root_block_device {
