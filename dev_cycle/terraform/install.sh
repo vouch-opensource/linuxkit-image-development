@@ -2,6 +2,10 @@
 
 set -ex
 
+# export linuxkit bucket name as environment variable
+
+echo export LINUXKIT_BUCKET="${linuxkit_bucket_name}" >> /etc/profile
+
 # ephemeral disk setup
 
 apt install nvme-cli
@@ -62,3 +66,5 @@ chmod +x install-babashka
 
 git clone https://github.com/vouch-opensource/linuxkit-image-development.git
 cp linuxkit-image-development/dev_cycle/scripts/* /usr/local/bin/
+
+touch /tmp/userdata_ok.txt
