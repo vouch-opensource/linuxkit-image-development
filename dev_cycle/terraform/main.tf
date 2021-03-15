@@ -32,7 +32,7 @@ provider "cloudinit" {
 data "cloudinit_config" "install" {
   part {
     content_type = "text/x-shellscript"
-    content = templatefile("${path.module}/install.sh",var.install)
+    content = templatefile("${path.module}/install.sh",merge(var.install,{linuxkit_bucket_name=var.linuxkit_bucket_name}))
     filename = "install.sh"
   }
 }

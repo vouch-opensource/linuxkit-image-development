@@ -2,6 +2,10 @@
 
 set -ex
 
+# export linuxkit bucket name as environment variable
+
+echo export LINUXKIT_BUCKET="${linuxkit_bucket_name}" >> /etc/profile
+
 # ephemeral disk setup
 
 apt install nvme-cli
