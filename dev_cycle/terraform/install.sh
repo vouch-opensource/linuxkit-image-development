@@ -66,3 +66,5 @@ chmod +x install-babashka
 
 git clone https://github.com/vouch-opensource/linuxkit-image-development.git
 cp linuxkit-image-development/dev_cycle/scripts/* /usr/local/bin/
+
+touch /tmp/userdata_ok.txt
