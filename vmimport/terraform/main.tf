@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "vmimport" {
-  bucket = var.bucket_name
+  bucket = var.linuxkit_bucket_name
   acl    = "private"
   force_destroy = true
 }
@@ -25,8 +25,8 @@ data "aws_iam_policy_document" "vmimport" {
       "s3:GetBucketAcl"
     ]
     resources = [
-      "arn:aws:s3:::${var.bucket_name}",
-      "arn:aws:s3:::${var.bucket_name}/*"
+      "arn:aws:s3:::${var.linuxkit_bucket_name}",
+      "arn:aws:s3:::${var.linuxkit_bucket_name}/*"
 
     ]
   }
@@ -48,6 +48,6 @@ data "aws_iam_policy_document" "vmimport" {
 }
 
 resource "aws_iam_policy" "vmimport" {
-  name = "${var.bucket_name}-vm-import"
+  name = "${var.linuxkit_bucket_name}-vm-import"
   policy = data.aws_iam_policy_document.vmimport.json
 }

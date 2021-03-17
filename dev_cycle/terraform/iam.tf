@@ -68,6 +68,6 @@ resource "aws_iam_role_policy_attachment" "allow_build_volume_attachment" {
 }
 
 resource "aws_iam_role_policy_attachment" "vmimport" {
-  policy_arn = vmimport.iam_policy_arn
+  policy_arn = module.vmimport.iam_policy_arn
   role = var.aws_iam_role_id
 }
