@@ -40,3 +40,8 @@ data "cloudinit_config" "install" {
 
 data "aws_region" "region" {}
 data "aws_caller_identity" "identity" {}
+
+module "vmimport_setup" {
+  source = "../../vmimport_setup/terraform"
+  bucket_name = var.linuxkit_bucket_name
+}
