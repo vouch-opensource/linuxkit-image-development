@@ -48,41 +48,6 @@ data "aws_iam_policy_document" "build_machine" {
     resources = ["*"]
   }
 
-  statement {
-    effect = "Allow"
-    actions = [
-      "s3:ListBucket",
-      "s3:ListBucketMultipartUploads",
-      "s3:ListMultipartUploadParts"
-    ]
-    resources = [
-      "arn:aws:s3:::${var.linuxkit_bucket_name}"
-    ]
-  }
-
-  statement {
-    effect = "Allow"
-    actions = [
-      "s3:GetObject*",
-      "s3:PutObject*"
-    ]
-    resources = [
-      "arn:aws:s3:::${var.linuxkit_bucket_name}/*"
-    ]
-  }
-
-  statement {
-    effect = "Allow"
-    actions = [
-      "ec2:ImportSnapshot",
-      "ec2:DescribeImportSnapshotTasks",
-      "ec2:RegisterImage"
-    ]
-    resources = [
-      "*"
-    ]
-  }
-
   depends_on = [data.aws_instance.linuxkit_instance]
 }
 
