@@ -12,9 +12,9 @@ LINUXKIT_BUCKET ?=
 FILE ?=
 
 # Registry
-DOCKER_REGISTRY_USERNAME ?= 
-DOCKER_REGISTRY_PASSSORD ?= 
-DOCKER_REGISTRY_URL := registry.hub.docker.com
+USERNAME ?=
+PASSWORD ?=
+URL := registry.hub.docker.com
 
 build:
 	linuxkit build -format aws -size 2048M -name $(OUTPUT_FILE) $(FILE)
@@ -33,7 +33,7 @@ linuxkit-instance-id:
                               | grep -E -o "i\-[[:alnum:]]+" > /tmp/lxk-instance-id
 
 remote-docker-login: build-machine-ip-address
-	@ssh ${REMOTE_USER}@${HOST} "docker login ${DOCKER_REGISTRY_URL} -u ${DOCKER_REGISTRY_USERNAME} -p ${DOCKER_REGISTRY_PASSWORD}"
+	@ssh ${REMOTE_USER}@${HOST} "docker login ${URL} -u ${USERNAME} -p ${PASSWORD}"
 
 remote-sync: build-machine-ip-address
 	rsync -azvp --exclude-from='.rsyncignore' . ${REMOTE_USER}@${HOST}:~/${PROJECT}
