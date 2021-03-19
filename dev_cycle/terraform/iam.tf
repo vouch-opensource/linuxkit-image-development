@@ -51,7 +51,7 @@ data "aws_iam_policy_document" "build_machine" {
   depends_on = [data.aws_instance.linuxkit_instance]
 }
 
-resource "aws_iam_instance_profile" "build_node" {
+resource "aws_iam_instance_profile" "build_machine" {
   name_prefix = var.machine_name
   role = var.aws_iam_role_id
 }

@@ -37,7 +37,6 @@ data "cloudinit_config" "install" {
   }
 }
 
-
 data "aws_region" "region" {}
 data "aws_caller_identity" "identity" {}
 
