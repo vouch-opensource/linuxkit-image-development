@@ -1,3 +1,23 @@
+resource "aws_iam_role" "build_machine" {
+  name = "build-machine-role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
 data "aws_iam_policy_document" "build_machine" {
 
   statement {
@@ -51,9 +71,9 @@ data "aws_iam_policy_document" "build_machine" {
   depends_on = [data.aws_instance.linuxkit_instance]
 }
 
-resource "aws_iam_instance_profile" "build_node" {
+resource "aws_iam_instance_profile" "build_machine" {
   name_prefix = var.machine_name
-  role = var.aws_iam_role_id
+  role = aws_iam_role.build_machine.name
 }
 
 resource "aws_iam_policy" "allow_build_volume_attachment" {
@@ -64,10 +84,11 @@ resource "aws_iam_policy" "allow_build_volume_attachment" {
 
 resource "aws_iam_role_policy_attachment" "allow_build_volume_attachment" {
   policy_arn = aws_iam_policy.allow_build_volume_attachment.arn
-  role = var.aws_iam_role_id
+  role = aws_iam_role.build_machine.name
 }
 
 resource "aws_iam_role_policy_attachment" "vmimport" {
   policy_arn = module.vmimport.iam_policy_arn
-  role = var.aws_iam_role_id
+  role = aws_iam_role.build_machine.name
+
 }

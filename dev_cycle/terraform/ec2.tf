@@ -4,7 +4,7 @@ resource "aws_instance" "build_machine" {
 
   ami = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
-  iam_instance_profile = aws_iam_instance_profile.build_node.id
+  iam_instance_profile = aws_iam_instance_profile.build_machine.id
   key_name = var.key_pair_name
   subnet_id = var.subnet_id
   associate_public_ip_address = true
@@ -18,7 +18,7 @@ resource "aws_instance" "build_machine" {
     Name = var.machine_name
   }
 
-  vpc_security_group_ids = [aws_security_group.build_node_access.id]
+  vpc_security_group_ids = [aws_security_group.build_machine_access.id]
   user_data_base64 = data.cloudinit_config.install.rendered
 }
 
@@ -28,7 +28,7 @@ resource "aws_spot_instance_request" "build_machine" {
 
   ami = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
-  iam_instance_profile = aws_iam_instance_profile.build_node.id
+  iam_instance_profile = aws_iam_instance_profile.build_machine.id
   key_name = var.key_pair_name
   subnet_id = var.subnet_id
   associate_public_ip_address = true
@@ -42,11 +42,11 @@ resource "aws_spot_instance_request" "build_machine" {
     Name = var.machine_name
   }
 
-  vpc_security_group_ids = [aws_security_group.build_node_access.id]
+  vpc_security_group_ids = [aws_security_group.build_machine_access.id]
   user_data_base64 = data.cloudinit_config.install.rendered
 }
 
-resource "aws_security_group" "build_node_access" {
+resource "aws_security_group" "build_machine_access" {
   name_prefix = var.machine_name
   vpc_id = var.vpc_id
 
