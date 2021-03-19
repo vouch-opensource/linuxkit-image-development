@@ -1,0 +1,29 @@
+name: terraform lint
+on: [pull_request]
+jobs:
+  tflint:
+    name: runner / tflint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 0.13.6
+
+      - name: Terraform init
+        run: |
+          cd dev_cycle/terraform
+          terraform init
+
+      - name: tflint
+        uses: reviewdog/action-tflint@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          working_directory: "dev_cycle/terraform"
+          reporter: github-pr-review
+          fail_on_error: "true"
+          filter_mode: "nofilter"
+          flags: "--module"
