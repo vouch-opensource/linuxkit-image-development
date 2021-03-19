@@ -7,7 +7,6 @@ variable "key_pair_name" {}
 variable "machine_name" {}
 variable "vpc_id" {}
 variable "subnet_id" {}
-variable "aws_iam_role_id" {}
 variable "ebs_kms_key_arn" {}
 variable "linuxkit_bucket_name" {}
 
