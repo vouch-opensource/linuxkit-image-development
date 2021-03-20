@@ -1,5 +1,5 @@
 resource "aws_iam_role" "build_machine" {
-  name = "build-machine-role"
+  name = var.machine_name
 
   assume_role_policy = <<EOF
 {
