@@ -18,27 +18,20 @@ data "aws_iam_policy_document" "vmimport" {
   statement {
     effect = "Allow"
     actions = [
-      "s3:GetBucketLocation",
-      "s3:GetObject",
-      "s3:ListBucket",
-      "s3:PutObject",
-      "s3:GetBucketAcl"
+      "s3:GetObject*",
+      "s3:PutObject*"
     ]
     resources = [
-      "arn:aws:s3:::${var.linuxkit_bucket_name}",
       "arn:aws:s3:::${var.linuxkit_bucket_name}/*"
-
     ]
   }
 
   statement {
     effect = "Allow"
     actions = [
-      "ec2:ModifySnapshotAttribute",
-      "ec2:CopySnapshot",
-      "ec2:DescribeImportSnapshotTasks",
       "ec2:RegisterImage",
-      "ec2:Describe*",
+      "ec2:ImportSnapshot",
+      "ec2:DescribeImportSnapshotTasks"
     ]
     resources = [
       "*"
