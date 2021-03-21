@@ -14,33 +14,57 @@ resource "aws_s3_bucket_public_access_block" "vmimport" {
 }
 
 data "aws_iam_policy_document" "vmimport" {
-
   statement {
-    effect = "Allow"
+    actions = ["sts:AssumeRole"]
+    effect  = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["vmie.amazonaws.com"]
+    }
+    condition {
+      test     = "StringEquals"
+      variable = "sts:Externalid"
+      values   = ["vmimport"]
+    }
+  }
+}
+
+resource "aws_iam_role" "vmimport" {
+  name               = "vmimport"
+  assume_role_policy = data.aws_iam_policy_document.vmimport.json
+}
+
+data "aws_iam_policy_document" "vmimport_access" {
+  statement {
     actions = [
-      "s3:GetObject*",
-      "s3:PutObject*"
+      "s3:GetBucketLocation",
+      "s3:GetObject",
+      "s3:ListBucket"
     ]
+    effect = "Allow"
     resources = [
+      "arn:aws:s3:::${var.linuxkit_bucket_name}",
       "arn:aws:s3:::${var.linuxkit_bucket_name}/*"
     ]
   }
-
   statement {
-    effect = "Allow"
     actions = [
+      "ec2:ModifySnapshotAttribute",
+      "ec2:CopySnapshot",
       "ec2:RegisterImage",
-      "ec2:ImportSnapshot",
-      "ec2:DescribeImportSnapshotTasks"
+      "ec2:Describe*"
     ]
-    resources = [
-      "*"
-    ]
+    effect    = "Allow"
+    resources = ["*"]
   }
-
 }
 
-resource "aws_iam_policy" "vmimport" {
-  name = "${var.linuxkit_bucket_name}-vm-import"
-  policy = data.aws_iam_policy_document.vmimport.json
+resource "aws_iam_policy" "vmimport_access" {
+  name   = "VMImportAccess"
+  policy = data.aws_iam_policy_document.vmimport_access.json
+}
+
+resource "aws_iam_role_policy_attachment" "vmimport_access" {
+  role       = aws_iam_role.vmimport.name
+  policy_arn = aws_iam_policy.vmimport_access.arn
 }
