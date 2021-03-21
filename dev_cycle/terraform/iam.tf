@@ -18,7 +18,7 @@ resource "aws_iam_role" "build_machine" {
 EOF
 }
 
-data "aws_iam_policy_document" "build_machine" {
+data "aws_iam_policy_document" "volume_attachment" {
 
   statement {
     effect = "Allow"
@@ -68,6 +68,41 @@ data "aws_iam_policy_document" "build_machine" {
     resources = ["*"]
   }
 
+  statement {
+    effect = "Allow"
+    actions = [
+      "ec2:DescribeInstances",
+      "ec2:DescribeVolumes"
+    ]
+    resources = ["*"]
+  }
+
+  depends_on = [data.aws_instance.linuxkit_instance]
+}
+
+data "aws_iam_policy_document" "linuxkit_push" {
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:PutObject",
+      "s3:GetObject"
+    ]
+    resources = [
+      "arn:aws:s3:::${var.linuxkit_bucket_name}/*"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ec2:RegisterImage",
+      "ec2:ImportSnapshot",
+      "ec2:DescribeImportSnapshotTasks"
+    ]
+    resources = ["*"]
+  }
+
   depends_on = [data.aws_instance.linuxkit_instance]
 }
 
@@ -76,19 +111,24 @@ resource "aws_iam_instance_profile" "build_machine" {
   role = aws_iam_role.build_machine.name
 }
 
-resource "aws_iam_policy" "allow_build_volume_attachment" {
-  name = "${local.build_machine.tag_name}-volume-attachment"
-  policy = data.aws_iam_policy_document.build_machine.json
+resource "aws_iam_policy" "linuxkit_push" {
+  name = "${local.build_machine.tag_name}-linuxkit-push"
+  policy = data.aws_iam_policy_document.linuxkit_push.json
   depends_on = [data.aws_instance.linuxkit_instance]
 }
 
-resource "aws_iam_role_policy_attachment" "allow_build_volume_attachment" {
-  policy_arn = aws_iam_policy.allow_build_volume_attachment.arn
+resource "aws_iam_policy" "volume_attachment" {
+  name = "${local.build_machine.tag_name}-volume-attachment"
+  policy = data.aws_iam_policy_document.volume_attachment.json
+  depends_on = [data.aws_instance.linuxkit_instance]
+}
+
+resource "aws_iam_role_policy_attachment" "linuxkit_push" {
+  policy_arn = aws_iam_policy.linuxkit_push.arn
   role = aws_iam_role.build_machine.name
 }
 
-resource "aws_iam_role_policy_attachment" "vmimport" {
-  policy_arn = module.vmimport.iam_policy_arn
+resource "aws_iam_role_policy_attachment" "volume_attachment" {
+  policy_arn = aws_iam_policy.volume_attachment.arn
   role = aws_iam_role.build_machine.name
-
 }

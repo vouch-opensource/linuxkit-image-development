@@ -43,4 +43,5 @@ data "aws_caller_identity" "identity" {}
 module "vmimport" {
   source = "../../vmimport/terraform"
   linuxkit_bucket_name = var.linuxkit_bucket_name
+  vmimport_service_role = var.vmimport_service_role
 }

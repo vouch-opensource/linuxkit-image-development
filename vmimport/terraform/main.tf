@@ -14,6 +14,7 @@ resource "aws_s3_bucket_public_access_block" "vmimport" {
 }
 
 data "aws_iam_policy_document" "vmimport" {
+  count = var.vmimport_service_role ? 1 : 0
   statement {
     actions = ["sts:AssumeRole"]
     effect  = "Allow"
@@ -30,11 +31,13 @@ data "aws_iam_policy_document" "vmimport" {
 }
 
 resource "aws_iam_role" "vmimport" {
+  count = var.vmimport_service_role ? 1 : 0
   name               = "vmimport"
-  assume_role_policy = data.aws_iam_policy_document.vmimport.json
+  assume_role_policy = data.aws_iam_policy_document.vmimport.0.json
 }
 
 data "aws_iam_policy_document" "vmimport_access" {
+  count = var.vmimport_service_role ? 1 : 0
   statement {
     actions = [
       "s3:GetBucketLocation",
@@ -60,11 +63,13 @@ data "aws_iam_policy_document" "vmimport_access" {
 }
 
 resource "aws_iam_policy" "vmimport_access" {
+  count = var.vmimport_service_role ? 1 : 0
   name   = "VMImportAccess"
-  policy = data.aws_iam_policy_document.vmimport_access.json
+  policy = data.aws_iam_policy_document.vmimport_access.0.json
 }
 
 resource "aws_iam_role_policy_attachment" "vmimport_access" {
-  role       = aws_iam_role.vmimport.name
-  policy_arn = aws_iam_policy.vmimport_access.arn
+  count = var.vmimport_service_role ? 1 : 0
+  role       = aws_iam_role.vmimport.0.name
+  policy_arn = aws_iam_policy.vmimport_access.0.arn
 }
