@@ -89,7 +89,7 @@ data "aws_iam_policy_document" "linuxkit_push" {
       "s3:GetObject"
     ]
     resources = [
-      "arn:aws:s3:::${var.linuxkit_bucket_name}/*"
+      "arn:aws:s3:::${var.bucket_name}/*"
     ]
   }
 
