@@ -39,10 +39,6 @@ variable "subnet_id" {
   description = "VPC Subnet ID of the build machine to launch in"
 }
 
-variable "aws_iam_role_id" {
-  description = "IAM Role name to be associated with the instance"
-}
-
 variable "ebs_kms_key_arn" {
   description = "ARN of the KMS key to use when linuxkit instances has encrypted volumes"
 }

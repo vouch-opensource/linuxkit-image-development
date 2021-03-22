@@ -61,7 +61,6 @@ You'll find the AMI ID in the command's output.
 - `key_pair_name` - Key name of the Key Pair to use for the instance
 - `vpc_id` - VPC ID of the build machine to launch in
 - `subnet_id` - Subnet ID of the build machine to launch in
-- `aws_iam_role_id` - IAM Role name to be associated with the instance
 - `ebs_kms_key_arn` - ARN of the KMS key to use when linuxkit instances has encrypted volumes
 - `install` - Set of strings with versions of packages to be installed from userdata script. The block supports the following:
   - `linuxkit_version` - Desired [linuxkit](https://github.com/linuxkit/linuxkit) version. The value can be any reference that would be accepted by the git checkout command, including branch and tag names.
@@ -72,26 +71,6 @@ You'll find the AMI ID in the command's output.
 Basic example - In your terraform code add something like this:
 
 ```hcl
-resource "aws_iam_role" "build_machine" {
-  name = "linuxkit-build-role"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "ec2.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
-}
-EOF
-}
-
 resource "aws_kms_key" "linuxkit_instance" {
   description = "KMS linuxkit instance"
   deletion_window_in_days = 10
@@ -104,7 +83,6 @@ module "lxk-dev" {
   machine_name = "linuxkit-build"
   vpc_id = "vpc-123456"
   subnet_id = "subnet-123456"
-  aws_iam_role_id = aws_iam_role.build_machine.id
   ebs_kms_key_arn = aws_kms_key.linuxkit_instance.arn
   linuxkit_instance_id = "i-1234567890"
   linuxkit_bucket_name = "linuxkit-imports"
