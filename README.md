@@ -62,13 +62,16 @@ You'll find the AMI ID in the command's output.
 - `vpc_id` - VPC ID of the build machine to launch in
 - `subnet_id` - Subnet ID of the build machine to launch in
 - `ebs_kms_key_arn` - ARN of the KMS key to use when linuxkit instances has encrypted volumes
+- `vmimport_service_role_enabled` - Enable vmimport service role creation
 - `install` - Set of strings with versions of packages to be installed from userdata script. The block supports the following:
   - `linuxkit_version` - Desired [linuxkit](https://github.com/linuxkit/linuxkit) version. The value can be any reference that would be accepted by the git checkout command, including branch and tag names.
   - `babashka_version` - Desired [babashka](https://github.com/babashka/babashka) version. The value can be any reference that would be accepted by the git checkout command, including branch and tag names.
 
 ##### Usage
 
-Basic example - In your terraform code add something like this:
+###### Basic example
+
+In your terraform code add something like this:
 
 ```hcl
 resource "aws_kms_key" "linuxkit_instance" {
@@ -77,16 +80,50 @@ resource "aws_kms_key" "linuxkit_instance" {
 }
 
 module "lxk-dev" {
-  source = "github.com/vouch-opensource/linuxkit-image-development/dev_cycle"
+  source = "github.com/vouch-opensource/linuxkit-image-development/dev_cycle/terraform"
   instance_type = "t3.medium"
+  linuxkit_instance_id = "i-1234567890"
   key_pair_name = "key-name"
   machine_name = "linuxkit-build"
   vpc_id = "vpc-123456"
   subnet_id = "subnet-123456"
   ebs_kms_key_arn = aws_kms_key.linuxkit_instance.arn
-  linuxkit_instance_id = "i-1234567890"
-  linuxkit_bucket_name = "linuxkit-imports"
+  bucket_name = "linuxkit-imports"
 }
+```
+
+###### vmimport
+
+Sometimes you have multiple environments and you want to create the vmimport service role separately:
+
+```hcl
+
+# creates the vmimport service role with no bucket creation; also, allow the role to read buckets with the given prefix
+module "linuxkit_import" {
+  source = "github.com/vouch-opensource/linuxkit-image-development/vmimport/terraform"
+  bucket_name = "my-linuxkit-images*"
+  bucket_enabled = false
+}
+
+resource "aws_kms_key" "linuxkit_instance" {
+  description = "KMS linuxkit instance"
+  deletion_window_in_days = 10
+}
+
+# provision the development environment with no vmimport service role
+module "lxk-dev" {
+  source = "github.com/vouch-opensource/linuxkit-image-development/dev_cycle/terraform"
+  instance_type = "t3.medium"
+  linuxkit_instance_id = "i-1234567890"
+  key_pair_name = "key-name"
+  machine_name = "linuxkit-build"
+  vpc_id = "vpc-123456"
+  subnet_id = "subnet-123456"
+  ebs_kms_key_arn = aws_kms_key.linuxkit_instance.arn
+  bucket_name = "linuxkit-imports"
+  vmimport_service_role_enabled = false
+}
+
 ```
 
 > Note: You have to use a [Nitro-based Instance Type](https://aws.amazon.com/ec2/nitro/) to ensure you can use the automatic
