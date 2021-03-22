@@ -10,7 +10,7 @@ variable "subnet_id" {}
 variable "ebs_kms_key_arn" {}
 variable "bucket_name" {}
 
-variable "vmimport_role_enabled" {
+variable "vmimport_service_role_enabled" {
   description = "Enable vmimport service role creation"
   type = bool
   default = true

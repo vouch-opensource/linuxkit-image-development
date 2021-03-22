@@ -43,5 +43,5 @@ data "aws_caller_identity" "identity" {}
 module "vmimport" {
   source = "../../vmimport/terraform"
   bucket_name = var.bucket_name
-  vmimport_role_enabled = var.vmimport_role_enabled
+  service_role_enabled = var.vmimport_service_role_enabled
 }
