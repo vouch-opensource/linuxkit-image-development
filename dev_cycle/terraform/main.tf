@@ -32,7 +32,7 @@ provider "cloudinit" {
 data "cloudinit_config" "install" {
   part {
     content_type = "text/x-shellscript"
-    content = templatefile("${path.module}/install.sh",merge(var.install,{linuxkit_bucket_name=var.linuxkit_bucket_name}))
+    content = templatefile("${path.module}/install.sh",merge(var.install,{bucket_name=var.bucket_name}))
     filename = "install.sh"
   }
 }
@@ -42,5 +42,6 @@ data "aws_caller_identity" "identity" {}
 
 module "vmimport" {
   source = "../../vmimport/terraform"
-  linuxkit_bucket_name = var.linuxkit_bucket_name
+  bucket_name = var.bucket_name
+  service_role_enabled = var.vmimport_service_role_enabled
 }

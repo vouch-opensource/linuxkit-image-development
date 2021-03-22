@@ -8,7 +8,13 @@ variable "machine_name" {}
 variable "vpc_id" {}
 variable "subnet_id" {}
 variable "ebs_kms_key_arn" {}
-variable "linuxkit_bucket_name" {}
+variable "bucket_name" {}
+
+variable "vmimport_service_role_enabled" {
+  description = "Enable vmimport service role creation"
+  type = bool
+  default = true
+}
 
 variable "install" {
   type = object({
