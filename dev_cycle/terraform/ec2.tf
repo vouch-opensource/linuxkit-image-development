@@ -11,7 +11,7 @@ resource "aws_instance" "build_machine" {
 
   root_block_device {
     volume_size = 20
-    volume_type = "gp2"
+    volume_type = "gp3"
   }
 
   tags = {
@@ -35,7 +35,7 @@ resource "aws_spot_instance_request" "build_machine" {
 
   root_block_device {
     volume_size = 20
-    volume_type = "gp2"
+    volume_type = "gp3"
   }
 
   tags = {
