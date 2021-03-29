@@ -72,9 +72,20 @@ data "aws_iam_policy_document" "volume_attachment" {
     effect = "Allow"
     actions = [
       "ec2:DescribeInstances",
-      "ec2:DescribeVolumes"
+      "ec2:DescribeVolumes",
+      "ec2:DescribeImages"
     ]
     resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ec2:CreateTags"
+    ]
+    resources = [
+      "arn:aws:ec2:*::image/*"
+    ]
   }
 
   depends_on = [data.aws_instance.linuxkit_instance]
