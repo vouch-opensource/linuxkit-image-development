@@ -60,7 +60,7 @@ chmod +x /usr/local/bin/linuxkit
 
 # install babashka
 
-curl -s https://raw.githubusercontent.com/borkdude/babashka/${babashka_version}/install -o install-babashka
+curl -s https://raw.githubusercontent.com/babashka/babashka/${babashka_version}/install -o install-babashka
 chmod +x install-babashka
 ./install-babashka
 
