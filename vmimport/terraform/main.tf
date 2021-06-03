@@ -58,7 +58,8 @@ data "aws_iam_policy_document" "vmimport_access" {
       "ec2:ModifySnapshotAttribute",
       "ec2:CopySnapshot",
       "ec2:RegisterImage",
-      "ec2:Describe*"
+      "ec2:Describe*",
+      "ec2:CreateTags"
     ]
     effect    = "Allow"
     resources = ["*"]
