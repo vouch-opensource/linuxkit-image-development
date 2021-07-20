@@ -25,9 +25,6 @@ data "aws_instance" "linuxkit_instance" {
   instance_id = var.linuxkit_instance_id
 }
 
-provider "cloudinit" {
-  version = "1.0.0"
-}
 
 data "cloudinit_config" "install" {
   part {
