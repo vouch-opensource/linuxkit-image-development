@@ -24,8 +24,6 @@ data "aws_ami" "ubuntu" {
 data "aws_instance" "linuxkit_instance" {
   instance_id = var.linuxkit_instance_id
 }
-
-
 data "cloudinit_config" "install" {
   part {
     content_type = "text/x-shellscript"
