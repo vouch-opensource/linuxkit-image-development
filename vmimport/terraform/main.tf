@@ -35,7 +35,7 @@ data "aws_iam_policy_document" "vmimport" {
 
 resource "aws_iam_role" "vmimport" {
   count = var.service_role_enabled ? 1 : 0
-  name               = "vmimport"
+  name               = var.role_name
   assume_role_policy = data.aws_iam_policy_document.vmimport.0.json
 }
 
@@ -68,7 +68,7 @@ data "aws_iam_policy_document" "vmimport_access" {
 
 resource "aws_iam_policy" "vmimport_access" {
   count = var.service_role_enabled ? 1 : 0
-  name   = "VMImportAccess"
+  name   = var.policy_name
   policy = data.aws_iam_policy_document.vmimport_access.0.json
 }
 

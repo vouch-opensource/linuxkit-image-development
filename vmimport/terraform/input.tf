@@ -14,3 +14,11 @@ variable "service_role_enabled" {
   type = bool
   default = true
 }
+
+variable "role_name" {
+  default = "vmimport"
+}
+
+variable "policy_name" {
+  default = "VMImportAccess"
+}
