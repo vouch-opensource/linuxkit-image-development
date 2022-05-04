@@ -16,9 +16,11 @@ variable "service_role_enabled" {
 }
 
 variable "role_name" {
+  type        = string
   default = "vmimport"
 }
 
 variable "policy_name" {
+  type        = string
   default = "VMImportAccess"
 }
