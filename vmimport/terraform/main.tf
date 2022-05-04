@@ -69,10 +69,10 @@ data "aws_iam_policy_document" "vmimport_access_common" {
 resource "aws_iam_policy" "vmimport_access_common" {
   count = var.service_role_enabled ? 1 : 0
   name   = var.policy_name
-  policy = data.aws_iam_policy_document.vmimport_access.0.json
+  policy = data.aws_iam_policy_document.vmimport_access_common.0.json
 }
 
-resource "aws_iam_role_policy_attachment" "vmimport_access" {
+resource "aws_iam_role_policy_attachment" "vmimport_access_common" {
   count = var.service_role_enabled ? 1 : 0
   role       = aws_iam_role.vmimportCommon.0.name
   policy_arn = aws_iam_policy.vmimport_access_common.0.arn
