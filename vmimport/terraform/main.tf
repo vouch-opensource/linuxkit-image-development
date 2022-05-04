@@ -28,7 +28,7 @@ data "aws_iam_policy_document" "vmimport" {
     condition {
       test     = "StringEquals"
       variable = "sts:Externalid"
-      values   = ["vmimport"]
+      values   = ["vmimportCommon"]
     }
   }
 }
