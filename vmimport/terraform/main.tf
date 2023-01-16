@@ -2,8 +2,12 @@ resource "aws_s3_bucket" "vmimport" {
   count = var.bucket_enabled ? 1 : 0
 
   bucket = var.bucket_name
-  acl    = "private"
   force_destroy = true
+}
+
+resource "aws_s3_bucket_acl" "vmimport" {
+  bucket = aws_s3_bucket.vmimport.id
+  acl    = "private"
 }
 
 resource "aws_s3_bucket_public_access_block" "vmimport" {
