@@ -6,7 +6,9 @@ resource "aws_s3_bucket" "vmimport" {
 }
 
 resource "aws_s3_bucket_acl" "vmimport" {
-  bucket = aws_s3_bucket.vmimport.id
+  count = var.bucket_enabled ? 1 : 0
+
+  bucket = aws_s3_bucket.vmimport.0.id
   acl    = "private"
 }
 
